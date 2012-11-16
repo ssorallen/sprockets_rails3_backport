@@ -17,22 +17,22 @@ module Sprockets
         end
       end
 
-      # def javascript_include_tag(*sources)
-      #   options = sources.extract_options!
-      #   debug = options.key?(:debug) ? options.delete(:debug) : debug_assets?
-      #   body  = options.key?(:body)  ? options.delete(:body)  : false
-      #   digest  = options.key?(:digest)  ? options.delete(:digest)  : digest_assets?
-      # 
-      #   sources.collect do |source|
-      #     if debug && asset = asset_paths.asset_for(source, 'js')
-      #       asset.to_a.map { |dep|
-      #         super(dep.to_s, { :src => asset_path(dep, :ext => 'js', :body => true, :digest => digest) }.merge!(options))
-      #       }
-      #     else
-      #       super(source.to_s, { :src => asset_path(source, :ext => 'js', :body => body, :digest => digest) }.merge!(options))
-      #     end
-      #   end.join("\n").html_safe
-      # end
+      def javascript_include_tag(*sources)
+        options = sources.extract_options!
+        debug = options.key?(:debug) ? options.delete(:debug) : debug_assets?
+        body  = options.key?(:body)  ? options.delete(:body)  : false
+        digest  = options.key?(:digest)  ? options.delete(:digest)  : digest_assets?
+      
+        sources.collect do |source|
+          if debug && asset = asset_paths.asset_for(source, 'js')
+            asset.to_a.map { |dep|
+              super(dep.to_s, { :src => asset_path(dep, :ext => 'js', :body => true, :digest => digest) }.merge!(options))
+            }
+          else
+            super(source.to_s, { :src => asset_path(source, :ext => 'js', :body => body, :digest => digest) }.merge!(options))
+          end
+        end.join("\n").html_safe
+      end
       
       def stylesheet_link_tag(*sources)
         options = sources.extract_options!
@@ -62,10 +62,10 @@ module Sprockets
       end
       alias_method :path_to_image, :image_path # aliased to avoid conflicts with an image_path named route
 
-      # def javascript_path(source)
-      #   asset_path(source, :ext => 'js')
-      # end
-      # alias_method :path_to_javascript, :javascript_path # aliased to avoid conflicts with an javascript_path named route
+      def javascript_path(source)
+        asset_path(source, :ext => 'js')
+      end
+      alias_method :path_to_javascript, :javascript_path # aliased to avoid conflicts with an javascript_path named route
 
       def stylesheet_path(source)
         asset_path(source, :ext => 'css')
